@@ -3,11 +3,11 @@ import { VisualCrossingProvider } from '../../providers/VisualCrossingProvider.j
 import { WeatherApiError } from '../../errors/WeatherApiError.js';
 
 describe('VisualCrossingProvider Unit Tests', () => {
-    let mockFetch;
-    let provider;
+    let mockFetch; // Mock fetch function
+    let provider; // Instance of VisualCrossingProvider
 
     beforeEach(() => {
-        mockFetch = vi.fn();
+        mockFetch = vi.fn(); // Create a mock fetch function
         provider = new VisualCrossingProvider('test_api_key', mockFetch);
     });
 
