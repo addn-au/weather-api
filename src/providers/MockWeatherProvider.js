@@ -1,2 +1,2 @@
-import { BaseWeatherProvider } from './BaseWeatherProvider.js';
-export class MockWeatherProvider extends BaseWeatherProvider {}
+import { WeatherStrategy } from './WeatherStrategy.js';
+export class MockWeatherProvider extends WeatherStrategy {}
