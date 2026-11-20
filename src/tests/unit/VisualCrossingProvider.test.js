@@ -27,8 +27,30 @@ describe('VisualCrossingProvider Unit Tests', () => {
                     temp: 19.5,
                     conditions: "Clear",
                     humidity: 60,
-                }
+                },
             })
-        });    
+        });
+        
+        const result = await provider.getWeather('Melbourne');
+
+        expect(mockFetch).toHaveBeenCalledTimes(1);
+        expect(mockFetch.mock.calls[0][0]).toContain('Melbourne'); // Check if the URL contains the city name
+        expect(mockFetch.mock.calls[0][0]).toContain('test_api_key'); // Check if the URL contains the APImock key
+        expect(result).toEqual({
+            city: 'Melbourne, VIC, Australia',
+            timezone: 'Australia/Melbourne',
+            temperature: 19.5,
+            conditions: 'Clear',
+            humidity: 60,
+            provider: 'VisualCrossing',
+        });
+        expect(result).toEqual({
+            city: 'Melbourne, VIC, Australia',
+            timezone: 'Australia/Melbourne',
+            temperature: 19.5,
+            conditions: 'Clear',
+            humidity: 60,
+            provider: 'VisualCrossing',
+        });
     });
 });
