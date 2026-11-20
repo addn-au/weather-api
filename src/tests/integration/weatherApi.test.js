@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { buildApp } from '../app.js';
+import { buildApp } from '../../app.js';
 
 describe('Weather API Integration Tests', () => {
   let app;
