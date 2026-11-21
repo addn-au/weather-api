@@ -26,8 +26,28 @@ export class VisualCrossingProvider extends WeatherStrategy {
             throw new WeatherApiError(`Network error communicating with VisualCrossing API: ${error.message}`, 502, 'BAD_GATEWAY');
         }
 
+        if (!response.ok) {
+            this.#handleHttpError(response.status);
+        }
+
         const data = await response.json();
         return this.#normalize(data);
+    }
+
+      #handleHttpError(status) {
+        switch (status) {
+            case 400:
+                throw new WeatherApiError('Invalid parameter or bad request format', 400, 'BAD_REQUEST');
+            case 401:
+                throw new WeatherApiError('Invalid API key or unauthorized subscription feature', 401, 'UNAUTHORIZED');
+            case 404:
+                throw new WeatherApiError('City or endpoint not found', 404, 'NOT_FOUND');
+            case 429:
+                throw new WeatherApiError('API rate limit exceeded', 429, 'TOO_MANY_REQUESTS');
+            case 500:
+            default:
+                throw new WeatherApiError('3rd-party weather provider internal error', 500, 'INTERNAL_SERVER_ERROR');
+        }
     }
 
     #normalize(rawData) {
