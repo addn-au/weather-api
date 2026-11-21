@@ -1,5 +1,14 @@
 import { WeatherStrategy } from './WeatherStrategy.js';
+
+// VisualCrossingProvider class that extends the WeatherStrategy
+// This class is responsible for fetching weather data from the VisualCrossing API
 export class VisualCrossingProvider extends WeatherStrategy {
+    
+    // Constructor for VisualCrossingProvider
+    // apiKey: The API key for accessing the VisualCrossing API
+    // fetchFn: Optional custom fetch function for making HTTP requests (default is global fetch)
+    // Throws an error if the API key is not provided
+    // Initializes the provider with the API key and fetch function, and sets the base URL for the VisualCrossing API 
     constructor(apiKey, fetchFn = globalThis.fetch) {
         super();
         if (!apiKey) {
@@ -10,6 +19,10 @@ export class VisualCrossingProvider extends WeatherStrategy {
         this.baseUrl = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline';
     }
 
+    // Method to fetch weather data for a given city from the VisualCrossing API
+    // This method constructs the API URL, makes the HTTP request, handles errors, and normalizes the response data
+    // city: The name of the city for which to fetch weather data
+    // Returns a Promise that resolves to the normalized weather data or throws a WeatherApiError in case of an error
     async getWeather(city) {
         const url = `${this.baseUrl}/${encodeURIComponent(city)}?unitGroup=metric&contentType=json&key=${this.apiKey}`;
         let response;
@@ -34,7 +47,10 @@ export class VisualCrossingProvider extends WeatherStrategy {
         return this.#normalize(data);
     }
 
-      #handleHttpError(status) {
+    // Private method to handle HTTP errors based on status codes
+    // This method throws a WeatherApiError with a specific message and status code based on the HTTP response status
+    // status: The HTTP status code returned from the VisualCrossing API response
+    #handleHttpError(status) {
         switch (status) {
             case 400:
                 throw new WeatherApiError('Invalid parameter or bad request format', 400, 'BAD_REQUEST');
@@ -50,6 +66,9 @@ export class VisualCrossingProvider extends WeatherStrategy {
         }
     }
 
+    // Private method to normalize the raw data from VisualCrossing API to a standard format
+    // This method ensures that the data returned from the API is transformed into a consistent structure
+    // rawData: The raw JSON data returned from the VisualCrossing raw API response
     #normalize(rawData) {
         return {
         city: rawData.resolvedAddress || rawData.address,
