@@ -42,7 +42,7 @@ describe('VisualCrossingProvider Unit Tests', () => {
             temperature: 19.5,
             conditions: 'Clear',
             humidity: 60,
-            provider: 'VisualCrossing',
+            provider: 'visualcrossing',
         });
     });
 });

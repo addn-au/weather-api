@@ -25,5 +25,19 @@ export class VisualCrossingProvider extends WeatherStrategy {
             }   
             throw new WeatherApiError(`Network error communicating with VisualCrossing API: ${error.message}`, 502, 'BAD_GATEWAY');
         }
+
+        const data = await response.json();
+        return this.#normalize(data);
     }
+
+    #normalize(rawData) {
+        return {
+        city: rawData.resolvedAddress || rawData.address,
+        timezone: rawData.timezone,
+        temperature: rawData.currentConditions?.temp,
+        conditions: rawData.currentConditions?.conditions,
+        humidity: rawData.currentConditions?.humidity,
+        provider: 'visualcrossing',
+        };
+    }    
 }
