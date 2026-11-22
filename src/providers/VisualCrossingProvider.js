@@ -1,4 +1,5 @@
 import { WeatherStrategy } from './WeatherStrategy.js';
+import { WeatherApiError } from '../errors/WeatherApiError.js';
 
 // VisualCrossingProvider class that extends the WeatherStrategy
 // This class is responsible for fetching weather data from the VisualCrossing API

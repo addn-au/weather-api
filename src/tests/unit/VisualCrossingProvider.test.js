@@ -15,7 +15,7 @@ describe('VisualCrossingProvider Unit Tests', () => {
         vi.useRealTimers(); // Reset timers after each test
         vi.restoreAllMocks(); // Restore all mocks after each test
     });
-
+   
     it('200 OK: fetches and normalises weather data successfully', async () => {
         mockFetch.mockResolvedValueOnce({
             ok: true, 
@@ -35,7 +35,7 @@ describe('VisualCrossingProvider Unit Tests', () => {
 
         expect(mockFetch).toHaveBeenCalledTimes(1);
         expect(mockFetch.mock.calls[0][0]).toContain('Melbourne'); // Check if the URL contains the city name
-        expect(mockFetch.mock.calls[0][0]).toContain('test_api_key'); // Check if the URL contains the APImock key
+        expect(mockFetch.mock.calls[0][0]).toContain('test_api_key'); // Check if the URL contains the API key
         expect(result).toEqual({
             city: 'Melbourne, VIC, Australia',
             timezone: 'Australia/Melbourne',
@@ -44,5 +44,27 @@ describe('VisualCrossingProvider Unit Tests', () => {
             humidity: 60,
             provider: 'visualcrossing',
         });
+    });
+
+    // Test error mapping for multiple HTTP status codes using parameterized tests
+    it.each([
+        [400, 'BAD_REQUEST'],
+        [401, 'UNAUTHORIZED'],
+        [404, 'NOT_FOUND'],
+        [429, 'TOO_MANY_REQUESTS'],
+        [500, 'INTERNAL_SERVER_ERROR'],
+    ])('maps HTTP %i response to WeatherApiError with code %s', async (status, expectedCode) => {
+        mockFetch.mockResolvedValueOnce({
+            ok: false,
+            status,
+        });
+        await provider.getWeather('Melbourne')
+            .catch(error => {
+                expect(error).toMatchObject({
+                    name: 'WeatherApiError',
+                    statusCode: status,
+                    code: expectedCode,
+                });
+            });
     });
 });
