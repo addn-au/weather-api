@@ -34,6 +34,8 @@ export class VisualCrossingProvider extends WeatherStrategy {
                 signal: AbortSignal.timeout(5000) // Set a timeout of 5 seconds
             });
         } catch (error) {
+            // TimeoutError is thrown when the request takes longer than the specified timeout
+            // AbortError is thrown when the request is aborted due to a timeout or user action (e.g., closing the browser tab, browser stop button, etc)
             if (error.name === 'TimeoutError' || error.name === 'AbortError') {
                 throw new WeatherApiError('Request to VisualCrossing API timed out', 504, 'GATEWAY_TIMEOUT');
             }   
