@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { VisualCrossingProvider } from '../../providers/VisualCrossingProvider.js';
-import { WeatherApiError } from '../../errors/WeatherApiError.js';
 
 describe('VisualCrossingProvider Unit Tests', () => {
     let mockFetch; // Mock fetch function
