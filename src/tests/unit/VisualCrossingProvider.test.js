@@ -67,4 +67,29 @@ describe('VisualCrossingProvider Unit Tests', () => {
                 });
             });
     });
+
+    // Test for timeout handling and error throwing when the 3rd-party API takes longer than 5 seconds to respond
+    it('aborts and throws 504 GATEWAY_TIMEOUT if 3rd-party API freezes beyond 5 seconds', async () => {
+        vi.useFakeTimers();
+
+        // Simulate a hanging fetch that respects AbortSignal
+        mockFetch.mockImplementationOnce((_url, { signal }) => {
+            return new Promise((_resolve, reject) => {
+                signal?.addEventListener('abort', () => {
+                    reject(signal.reason || new DOMException('The operation was aborted', 'TimeoutError'));
+                });
+            });
+        });
+
+        const weatherPromise = provider.getWeather('Melbourne');
+
+        // Fast-forward time by 5000ms
+        vi.advanceTimersByTime(5000);
+
+        await expect(weatherPromise).rejects.toMatchObject({
+            name: 'WeatherApiError',
+            statusCode: 504,
+            code: 'GATEWAY_TIMEOUT',
+        });
+    }, 15000); // Set a timeout of 15 seconds for this test
 });
