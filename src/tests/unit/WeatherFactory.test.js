@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { MockWeatherProvider } from '../../providers/MockWeatherProvider.js';
 import { VisualCrossingProvider } from '../../providers/VisualCrossingProvider.js';
-import { WeatherFactory } from '../../providers/WeatherProviderFactory.js';
+import { WeatherProviderFactory as WeatherFactory } from '../../providers/WeatherProviderFactory.js';
 
 const originalApiKey = process.env.VISUAL_CROSSING_API_KEY;
 
