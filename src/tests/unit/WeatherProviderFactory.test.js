@@ -26,6 +26,6 @@ describe('WeatherFactory', () => {
 
     it('throws for an unsupported provider type', () => {
         expect(() => WeatherFactory.createProvider('unsupported'))
-            .toThrow();
+            .toThrow('Unsupported weather provider: "unsupported"');
     });
 });
