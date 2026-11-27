@@ -3,16 +3,6 @@ import { MockWeatherProvider } from '../../providers/MockWeatherProvider.js';
 import { VisualCrossingProvider } from '../../providers/VisualCrossingProvider.js';
 import { WeatherProviderFactory as WeatherFactory } from '../../providers/WeatherProviderFactory.js';
 
-const originalApiKey = process.env.VISUAL_CROSSING_API_KEY;
-
-afterEach(() => {
-    if (originalApiKey === undefined) {
-        delete process.env.VISUAL_CROSSING_API_KEY;
-    } else {
-        process.env.VISUAL_CROSSING_API_KEY = originalApiKey;
-    }
-});
-
 describe('WeatherFactory', () => {
     it('creates a mock weather provider', () => {
         expect(WeatherFactory.createProvider('mock')).toBeInstanceOf(MockWeatherProvider);
